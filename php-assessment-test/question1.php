@@ -1,9 +1,11 @@
 <?php
 
 
+
+print '<pre>';
+
 function printDataStructure($data)
 {
-    print '<pre>';
     foreach($data as $key => $value) {
          if (is_array($value)) {
              if (is_string($key)) {
