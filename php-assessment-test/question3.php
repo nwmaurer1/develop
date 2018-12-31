@@ -205,24 +205,34 @@ class Cart extends Customer
         return $this->addressToShipFrom;
     }
 
+    public function setShippingRateCost($override = false, $price = 0)
+    {
+        if ($override) {
+            $this->shippingCost = $price;
+        } else {
+            $Cost = new ShippingRateApi($this->getAddressToShipFrom(), $this->getFullAddressInformation());
+            $this->shippingCost = $Cost;
+        }
+
+    }
+
     public function getShippingRateCost()
     {
-        $Cost = new ShippingRateApi($this->getAddressToShipFrom(), $this->getFullAddressInformation());
-        return $Cost->ShippingRateCost();
+        return $this->shippingCost;
     }
 
     public function getTotalCostOfSingleItem($id)
     {
-        $desiredItem = [];
-        foreach ($this->items as $item) {
-            if ($item->id == $id) {
-                $desiredItem = $item;
-                break;
-            }
-        }
+        $desiredItem = $this->getItemInCart($id);
         $shippingCost = $this->getShippingRateCost();
 
-        return (($desiredItem->price + $shippingCost + ($desiredItem * $this->tax_rate)) * $desiredItem->quantity);
+        return (($desiredItem->price + $shippingCost + ($desiredItem->price * $this->tax_rate)) * $desiredItem->quantity);
+    }
+
+    public function setCostOfSingleItem($id, $price = 0)
+    {
+        $desiredItem = $this->getItemInCart($id);
+        $desiredItem->setItemPrice($price);
     }
 
     public function updateSubtotal()
