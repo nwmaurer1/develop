@@ -156,6 +156,7 @@ class Cart extends Customer
         $item = new Item($id, $name, $quantity, $price);
 
         $this->items[] = $item;
+        $this->updateTotalItemsInCart();
         $this->updateSubtotal();
         $this->updateTotal();
     }
