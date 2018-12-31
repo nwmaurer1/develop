@@ -139,6 +139,8 @@ class Cart extends Customer
     private $subtotal;
     private $addressToShipFrom;
     private $total;
+    private $itemCount;
+    private $shippingCost;
 
     public function __construct($first_name, $last_name, $address, $subtotal, $total, $addressToShipFrom)
     {
