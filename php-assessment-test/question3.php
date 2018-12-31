@@ -142,14 +142,14 @@ class Cart extends Customer
     private $itemCount;
     private $shippingCost;
 
-    public function __construct($first_name, $last_name, $address, $subtotal, $total, $addressToShipFrom)
+    public function __construct($first_name, $last_name, $address, $subtotal, $total, $addressToShipFrom, $tax_rate = .07)
     {
         parent::__construct($first_name, $last_name, $address);
         $this->subtotal = $subtotal;
         $this->total = $total;
         $this->items = [];
         $this->addressToShipFrom = $addressToShipFrom;
-        $this->tax_rate = .07;
+        $this->tax_rate = $tax_rate;
     }
 
     public function addItemToCart($id, $name, $quantity, $price)
