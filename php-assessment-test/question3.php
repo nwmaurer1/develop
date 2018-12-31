@@ -167,19 +167,31 @@ class Cart extends Customer
                 unset($this->items[$key]);
             }
         }
-
+        $this->updateTotalItemsInCart();
         $this->updateSubtotal();
         $this->updateTotal();
 
     }
 
+    public function getItemInCart($id)
+    {
+        foreach ($this->items as $item) {
+            if ($item->id == $id) {
+                return $item;
+            }
+        }
+    }
+
+    public function updateTotalItemsInCart()
+    {
+        foreach ($this->items as $item) {
+            $this->itemCount = $this->itemCount + $item->quantity;
+        }
+    }
+
     public function getTotalItemsInCart()
     {
-        $count = 0;
-        foreach ($this->items as $item) {
-            $count = $count + $item->quantity;
-        }
-        return $count;
+        return $this->itemCount;
     }
 
     public function updateAddressToShip($addressToShipFrom)
