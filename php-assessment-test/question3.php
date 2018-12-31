@@ -134,7 +134,7 @@ class Item
 
 class Cart extends Customer
 {
-    private $tax_rate = .07;
+    private $tax_rate;
     private $items;
     private $subtotal;
     private $addressToShipFrom;
@@ -149,6 +149,7 @@ class Cart extends Customer
         $this->total = $total;
         $this->items = [];
         $this->addressToShipFrom = $addressToShipFrom;
+        $this->tax_rate = .07;
     }
 
     public function addItemToCart($id, $name, $quantity, $price)
@@ -181,6 +182,7 @@ class Cart extends Customer
                 return $item;
             }
         }
+        return;
     }
 
     public function updateTotalItemsInCart()
@@ -221,12 +223,22 @@ class Cart extends Customer
         return $this->shippingCost;
     }
 
+    public function setTaxRate($rate)
+    {
+        $this->tax_rate = $rate;
+    }
+
+    public function getTaxRate()
+    {
+        return $this->tax_rate;
+    }
+
     public function getTotalCostOfSingleItem($id)
     {
         $desiredItem = $this->getItemInCart($id);
         $shippingCost = $this->getShippingRateCost();
 
-        return (($desiredItem->price + $shippingCost + ($desiredItem->price * $this->tax_rate)) * $desiredItem->quantity);
+        return (($desiredItem->price + $shippingCost + ($desiredItem->price * $this->getTaxRate())) * $desiredItem->quantity);
     }
 
     public function setCostOfSingleItem($id, $price = 0)
@@ -253,7 +265,7 @@ class Cart extends Customer
     public function updateTotal()
     {
         $shippingCost = $this->getShippingRateCost();
-        $this->total = ($this->getSubtotal() + $shippingCost + ($this->getSubtotal() * $this->tax_rate));
+        $this->total = ($this->getSubtotal() + $shippingCost + ($this->getSubtotal() * $this->getTaxRate()));
     }
 
     public function getTotal()
