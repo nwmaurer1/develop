@@ -117,6 +117,15 @@ $example = array (
     ),
 );
 
+
+/**
+ *
+ * Prints the Data Structure regardless of level in a easy display.
+ *
+ * @param    array  $data An Array of Objects
+ * @return   void
+ *
+ */
 function printDataStructure($data)
 {
     foreach($data as $key => $value) {
@@ -132,5 +141,8 @@ function printDataStructure($data)
 
     return;
 }
+
+//Test Bench
+
 print '<pre>';
 printDataStructure($example);
