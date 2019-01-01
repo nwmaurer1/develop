@@ -182,7 +182,7 @@ class Cart extends Customer
                 return $item;
             }
         }
-        return;
+        return [];
     }
 
     public function updateTotalItemsInCart()
