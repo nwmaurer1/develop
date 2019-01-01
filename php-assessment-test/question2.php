@@ -117,12 +117,23 @@ $example = array (
     ),
 );
 
-
+/**
+ *
+ * Sorts Data Structures by a key or keys regardless of the items level.
+ *
+ * @param    array  $data An Array of Objects
+ * @param    array  $sortingKeys An Array of keys to sort $data. It can be a string instead
+ * @return      array $data An Array of objects that is sorted
+ *
+ */
 function sortDataStructureByKey($data, $sortingKeys)
 {
+
     if(!is_array($sortingKeys)) {
         $sortingKeys = array($sortingKeys);
     }
+    //Takes the DataStructure and compares each array and it's nested key values
+    //with $a and $b as each individual array within the DataStructure
     usort($data, function($a, $b) use($sortingKeys) {
         $returnVal = 0;
         foreach($sortingKeys as $sortingKey) {
@@ -141,16 +152,17 @@ function sortDataStructureByKey($data, $sortingKeys)
                 }
             } else {
                 if($returnVal == 0) {
-                    $retval = strnatcmp($a[$sortingKey],$b[$sortingKey]);
+                    $returnVal = strnatcmp($a[$sortingKey],$b[$sortingKey]);
                 }
             }
 
         }
-        return $retval;
+        return $returnVal;
     });
     return $data;
 }
 
+//Test Bench.
 
 $data = sortDataStructureByKey($example, ['room_no','account_id']);
 $data1 = sortDataStructureByKey($example, 'room_no');
