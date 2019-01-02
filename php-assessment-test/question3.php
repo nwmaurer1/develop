@@ -169,7 +169,7 @@ class Cart extends Customer
     public function removeItemFromCart($id)
     {
         foreach ($this->items as $key => $item) {
-            if ($item->id == $id) {
+            if ($item->getItemID() == $id) {
                 unset($this->items[$key]);
             }
         }
@@ -182,7 +182,7 @@ class Cart extends Customer
     public function getItemInCart($id)
     {
         foreach ($this->items as $item) {
-            if ($item->id == $id) {
+            if ($item->getItemID() == $id) {
                 return $item;
             }
         }
@@ -192,7 +192,7 @@ class Cart extends Customer
     public function updateTotalItemsInCart()
     {
         foreach ($this->items as $item) {
-            $this->itemCount = $this->itemCount + $item->quantity;
+            $this->itemCount = $this->itemCount + $item->getItemQuantity();
         }
     }
 
@@ -240,9 +240,10 @@ class Cart extends Customer
     public function getTotalCostOfSingleItem($id)
     {
         $desiredItem = $this->getItemInCart($id);
+        //Shipping Cost is zero
         $shippingCost = $this->getShippingRateCost();
 
-        return (($desiredItem->price + $shippingCost + ($desiredItem->price * $this->getTaxRate())) * $desiredItem->quantity);
+        return (($desiredItem->getItemPrice() + $shippingCost + ($desiredItem->getItemPrice() * $this->getTaxRate())) * $desiredItem->getItemQuantity());
     }
 
     public function setCostOfSingleItem($id, $price = 0)
@@ -255,7 +256,7 @@ class Cart extends Customer
     {
         $cost = 0;
         foreach ($this->items as $item) {
-            $cost = $cost + ($item->price * $item->quantity);
+            $cost = $cost + ($item->getItemPrice() * $item->getItemQuantity());
         }
 
         $this->subtotal = $cost;
