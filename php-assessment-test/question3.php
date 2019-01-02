@@ -2,10 +2,10 @@
 
 class Customer
 {
-    private $first_name;
-    private $last_name;
-    private $address = array(
-        array(
+    private $customer_information = array(
+        'first_name' => 'name',
+        'last_name' => 'name',
+        'address' => array(
             'address_1' => '',
             'address_2' => '',
             'city' => '',
@@ -16,33 +16,35 @@ class Customer
 
     public function __construct($first_name, $last_name, $address)
     {
-        $this->first_name = $first_name;
-        $this->last_name = $last_name;
-        if (!is_array($address)) $address = array($address);
+        $this->customer_information['first_name'] = $first_name;
+        $this->customer_information['last_name'] = $last_name;
+        if (!is_array($address)) {
+            $address = array($address);
+        }
 
         foreach ($address as $key => $value) {
-            $this->address[$key] = $value;
+            $this->customer_information['address'][$key] = $value;
         }
     }
 
     public function updateFirstName($first_name)
     {
-        $this->first_name = $first_name;
+        $this->customer_information['first_name'] = $first_name;
     }
 
     public function getFirstName()
     {
-        return $this->first_name;
+        return $this->customer_information['first_name'];
     }
 
     public function updateLastName($last_name)
     {
-        $this->last_name = $last_name;
+        $this->customer_information['last_name'] = $last_name;
     }
 
     public function getLastName()
     {
-        return $this->last_name;
+        return $this->customer_information['last_name'];
     }
 
     public function getFullName()
@@ -52,26 +54,28 @@ class Customer
 
     public function updateAddress($address)
     {
-        if (!is_array($address)) $address = array($address);
+        if (!is_array($address)) {
+            $address = array($address);
+        }
 
         foreach ($address as $key => $value) {
-            $this->address[$key] = $value;
+            $this->customer_information['address'][$key] = $value;
         }
     }
 
     public function getAddress_1()
     {
-        return $this->address['address_1'];
+        return $this->customer_information['address']['address_1'];
     }
 
     public function getAddress_2()
     {
-        return $this->address['address_2'];
+        return $this->customer_information['address']['address_2'];
     }
 
-    public function getFullAddressInformation()
+    public function getFullCustomerInformation()
     {
-        return $this->address;
+        return  $this->customer_information;
     }
 
 }
