@@ -278,3 +278,50 @@ class Cart extends Customer
         return $this->total;
     }
 }
+
+function testBench()
+{
+    $first_name = 'John';
+    $last_name = 'Smith';
+    $address = [
+        'address_1' => '1600 Pennsylvania Ave',
+        'address_2' => '',
+        'city' => 'District of Columbia',
+        'state' => 'NW',
+        'zip' => '20500',
+    ];
+    $subtotal = 0;
+    $total = 0;
+    $addressToShipFrom = 'Amazon Headquarters 410 Terry Ave. N Seattle, WA 98109';
+    $cart = new Cart($first_name, $last_name, $address, $subtotal, $total, $addressToShipFrom);
+
+    print_r($cart->getTotalItemsInCart() . '<br>');
+
+    $cart->addItemToCart(17, 'Beef Steak', 4, 12.18);
+
+    print_r($cart->getTotalItemsInCart() . '<br>');
+
+    print_r($cart->getSubtotal() . '<br>');
+
+    print_r(var_export($cart->getItemInCart(17)) . '<br>');
+
+    $cart->addItemToCart(12, 'HorseRadish', 2, 2.50);
+
+    print_r($cart->getFullName() . '<br>');
+
+    print_r($cart->getTaxRate() . '<br>');
+
+    $cart->updateFirstName('Jerry');
+
+    $cart->updateLastName('Seinfeld');
+
+    print_r(var_export($cart->getFullCustomerInformation()) . '<br>');
+
+    print_r($cart->getTotal() . '<br>');
+
+    print_r($cart->getTotalCostOfSingleItem(12) . '<br>');
+
+    print_r($cart->getSubtotal());
+}
+
+testBench();
