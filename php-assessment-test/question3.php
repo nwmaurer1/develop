@@ -156,6 +156,16 @@ class Cart extends Customer
         $this->tax_rate = $tax_rate;
     }
 
+    /**
+     *
+     * Add Item(s) to the array of items in the cart.
+     *
+     * @param    integer $id is an id that relates to the item.
+     * @param    string $name is the name of the item to be added to the cart
+     * @param    integer $quantity is the amount of the same item that is to be added.
+     * @param    float   $price is the price of the item added to the cart.
+     *
+     */
     public function addItemToCart($id, $name, $quantity, $price)
     {
         $item = new Item($id, $name, $quantity, $price);
@@ -166,6 +176,13 @@ class Cart extends Customer
         $this->updateTotal();
     }
 
+    /**
+     *
+     * Remove Item(s) from the array of items in the cart.
+     *
+     * @param    integer $id An id that relates to the item.
+     *
+     */
     public function removeItemFromCart($id)
     {
         foreach ($this->items as $key => $item) {
@@ -179,6 +196,20 @@ class Cart extends Customer
 
     }
 
+    public function updateItemQuantity($id, $quantity)
+    {
+        $desiredItem = $this->getItemInCart($id);
+        $desiredItem->setItemQuantity($quantity);
+    }
+
+    /**
+     *
+     * Gets Item Object out of array of Item Objects in cart.
+     *
+     * @param    integer $id An id that relates to the item.
+     * @return      array/object returns an array or object of that item from an array of item objects.
+     *
+     */
     public function getItemInCart($id)
     {
         foreach ($this->items as $item) {
@@ -211,6 +242,15 @@ class Cart extends Customer
         return $this->addressToShipFrom;
     }
 
+    /**
+     *
+     * Overrides or sets the value of the shipping cost with the Shipping rate API.
+     *
+     * @param    bool $override flags whether the shipping rate cost can be overridden
+     * @param    integer $price sets the value of the shipping cost rate
+     *
+     *
+     */
     public function setShippingRateCost($override = false, $price = 0)
     {
         if ($override) {
@@ -219,7 +259,6 @@ class Cart extends Customer
             $Cost = new ShippingRateApi($this->getAddressToShipFrom(), $this->getFullAddressInformation());
             $this->shippingCost = $Cost;
         }
-
     }
 
     public function getShippingRateCost()
@@ -237,21 +276,50 @@ class Cart extends Customer
         return $this->tax_rate;
     }
 
+    /**
+     *
+     * Gets the total cost of one item without quantity included in the cart.
+     *
+     * @param    integer $id An id that relates to the item.
+     * @return      float The Price of the single item without quantity
+     *
+     */
     public function getTotalCostOfSingleItem($id)
     {
         $desiredItem = $this->getItemInCart($id);
-        //Shipping Cost is zero
+        //Shipping Cost is zero until override price is entered.
         $shippingCost = $this->getShippingRateCost();
 
-        return (($desiredItem->getItemPrice() + $shippingCost + ($desiredItem->getItemPrice() * $this->getTaxRate())) * $desiredItem->getItemQuantity());
+        return ($desiredItem->getItemPrice() + $shippingCost + ($desiredItem->getItemPrice() * $this->getTaxRate()));
     }
 
-    public function setCostOfSingleItem($id, $price = 0)
+    public function getTotalCostOfSingleItemWithQuantity($id)
+    {
+
+       $desiredItem = $this->getItemInCart($id);
+       $cost = $this->getTotalCostOfSingleItem($id) * $desiredItem->getItemQuantity();
+       return $cost;
+    }
+
+    /**
+     *
+     * Set the cost of an item regardless of quantity.
+     *
+     * @param    integer $id is an id that relates to the item.
+     * @param    float $price overrides the price of a single item (regardless of quantity).
+     *
+     */
+    public function setCostOfSingleItem($id, $price = 0.00)
     {
         $desiredItem = $this->getItemInCart($id);
         $desiredItem->setItemPrice($price);
     }
 
+    /**
+     *
+     * Helper Function: Updates Subtotal value when adding or removing items in cart.
+     *
+     */
     public function updateSubtotal()
     {
         $cost = 0;
@@ -262,11 +330,17 @@ class Cart extends Customer
         $this->subtotal = $cost;
     }
 
+
     public function getSubtotal()
     {
         return $this->subtotal;
     }
 
+    /**
+     *
+     * Helper Function: Updates Total value when adding or removing items in cart.
+     *
+     */
     public function updateTotal()
     {
         $shippingCost = $this->getShippingRateCost();
